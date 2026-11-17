@@ -13,6 +13,14 @@ export function expectHintIsPresent(shouldBeThere: boolean): void {
     if (shouldBeThere) expect(hintText).toBeInTheDocument();
     else expect(hintText).toBeNull();
 }
+export async function clickHintButton(): Promise<void> {
+    const toggleHintButton = screen.getByRole("button", {
+        name: /Toggle Hint/i,
+    });
+    await act(async () => {
+        toggleHintButton.click();
+    });
+}
 
 describe("Reveal Answer", () => {
     beforeEach(() => {
@@ -39,7 +47,8 @@ describe("Reveal Answer", () => {
     });
 
     // Click Toggle Answer Visibility button, system shows answer
-    test("Click Toggle Answer Visibility button, system shows answer", async () => {
+    test("Click Toggle Answer Visibility button after clicking Hint, system shows answer", async () => {
+        await clickHintButton();
         const toggleAnswerButton = screen.getByRole("button", {
             name: /Toggle Answer Visibility/i,
         });
@@ -53,6 +62,7 @@ describe("Reveal Answer", () => {
     // /*
     // Click Toggle Answer Visibility button, system shows answer
     test("Click Toggle Answer Visibility button, click answer button again, system hides answer", async () => {
+        await clickHintButton();
         const toggleAnswerButton = screen.getByRole("button", {
             name: /Toggle Answer Visibility/i,
         });
@@ -71,7 +81,17 @@ describe("Reveal Answer", () => {
         // so an easy bug would be hiding too much on the page
         expect(toggleAnswerButton).toBeVisible();
     });
-    // */
+    // Click Toggle Answer Visibility button, system shows answer
+    test("Click Toggle Answer Visibility button without clicking Hint, system doesn't show answer", async () => {
+        const toggleAnswerButton = screen.getByRole("button", {
+            name: /Toggle Answer Visibility/i,
+        });
+        await act(async () => {
+            toggleAnswerButton.click();
+        });
+        //system doesn't show answer
+        expectAnswerIsPresent(false);
+    });
 });
 
 describe("Reveal Hint", () => {
