@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 export function RevealAnswer({answer}: {answer: string}): React.JSX.Element {
     const [answerVisible, setanswerVisible] = useState<boolean>(false);
     const [answerHintVisible, setanswerHintVisible] = useState<boolean>(false);
+    const [hintGotten, setHintGotten] = useState<boolean>(false);
 
     function toggleVisibility() {
         if (answerVisible) {
@@ -17,6 +18,7 @@ export function RevealAnswer({answer}: {answer: string}): React.JSX.Element {
         if (answerHintVisible) {
             setanswerHintVisible(false);
         } else {
+            setHintGotten(true);
             setanswerHintVisible(true);
         }
     }
@@ -26,7 +28,7 @@ export function RevealAnswer({answer}: {answer: string}): React.JSX.Element {
             Answer: {answerVisible && answer}
             Hint: {answerHintVisible ? "the hint" : ""}
             <span>
-                <Button onClick={toggleVisibility}>
+                <Button disabled={!hintGotten} onClick={toggleVisibility}>
                     Toggle Answer Visibility
                 </Button>
             </span>
