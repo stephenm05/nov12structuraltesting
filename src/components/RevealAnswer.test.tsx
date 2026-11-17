@@ -8,6 +8,12 @@ export function expectAnswerIsPresent(shouldBeThere: boolean): void {
     else expect(answerText).toBeNull();
 }
 
+export function expectHintIsPresent(shouldBeThere: boolean): void {
+    let hintText = screen.queryByText(/the hint/);
+    if (shouldBeThere) expect(hintText).toBeInTheDocument();
+    else expect(hintText).toBeNull();
+}
+
 describe("Reveal Answer", () => {
     beforeEach(() => {
         render(<RevealAnswer />);
@@ -65,5 +71,65 @@ describe("Reveal Answer", () => {
         // so an easy bug would be hiding too much on the page
         expect(toggleAnswerButton).toBeVisible();
     });
-    //*/
+    // */
+});
+
+describe("Reveal Hint", () => {
+    beforeEach(() => {
+        render(<RevealAnswer />);
+    });
+
+    test("Hint field is shown", () => {
+        // We use `getByText` because the text MUST be there
+        const hintFieldName = screen.getByText(/Hint:/i);
+        expect(hintFieldName).toBeInTheDocument();
+    });
+
+    test("Hint is not initially shown", () => {
+        expectHintIsPresent(false);
+    });
+
+    // Click "Toggle Hint" button
+
+    test("There is a Toggle Hint button", () => {
+        const toggleHintButton = screen.getByRole("button", {
+            name: /Toggle Hint/i,
+        });
+        expect(toggleHintButton).toBeInTheDocument();
+    });
+
+    // Click Toggle Hint button, system shows answer
+    test("Click Toggle Hint button, system shows hint", async () => {
+        const toggleHintButton = screen.getByRole("button", {
+            name: /Toggle Hint/i,
+        });
+        await act(async () => {
+            toggleHintButton.click();
+        });
+        //system shows answer
+        expectHintIsPresent(true);
+    });
+
+    // /*
+    // Click Toggle Hint button, system shows answer
+    test("Click Toggle Hint button, click hint button again, system hides hint", async () => {
+        const toggleHintButton = screen.getByRole("button", {
+            name: /Toggle Hint/i,
+        });
+        await act(async () => {
+            toggleHintButton.click();
+        });
+        await act(async () => {
+            toggleHintButton.click();
+        });
+
+        //system hides answer
+        expectHintIsPresent(false);
+
+        // answer button still there
+        // only testing this because this component changes visibility
+        // so an easy bug would be hiding too much on the page
+        expect(toggleHintButton).toBeVisible();
+    });
+    // */
 });
