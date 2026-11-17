@@ -24,7 +24,7 @@ export async function clickHintButton(): Promise<void> {
 
 describe("Reveal Answer", () => {
     beforeEach(() => {
-        render(<RevealAnswer answer="42"/>);
+        render(<RevealAnswer answer="42" hint="the hint"/>);
     });
 
     test("Answer field is shown", () => {
@@ -96,7 +96,7 @@ describe("Reveal Answer", () => {
 
 describe("Reveal Hint", () => {
     beforeEach(() => {
-        render(<RevealAnswer answer="42"/>);
+        render(<RevealAnswer answer="42" hint="the hint"/>);
     });
 
     test("Hint field is shown", () => {
