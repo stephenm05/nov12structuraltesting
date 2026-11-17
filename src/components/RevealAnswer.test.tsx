@@ -96,7 +96,7 @@ describe("Reveal Answer", () => {
 
 describe("Reveal Hint", () => {
     beforeEach(() => {
-        render(<RevealAnswer />);
+        render(<RevealAnswer answer="42"/>);
     });
 
     test("Hint field is shown", () => {
